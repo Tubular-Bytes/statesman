@@ -1,0 +1,18 @@
+version: "2"
+
+linters:
+  default: fast
+
+  enable:
+    - cyclop
+  
+  disable:
+    - depguard
+    - mnd
+    - testpackage
+    - gocyclo
+  
+  settings:
+    cyclop:
+      # TODO decrease this to 10
+      max-complexity: 15

@@ -1,0 +1,6 @@
+FROM debian:bookworm
+
+RUN apt-get update && apt-get install -y ca-certificates
+
+COPY ./statesman /usr/bin/statesman
+ENTRYPOINT ["/usr/bin/statesman"]

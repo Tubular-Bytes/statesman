@@ -1,0 +1,55 @@
+---
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+  -
+    name: fetch
+    image: alpine/git
+    when:
+      event:
+        - push
+    commands:
+      - git fetch --tags
+
+  -
+    name: lint
+    image: golang:1.23
+    when:
+      event:
+        - push
+    commands:
+      - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.0.2
+      - golangci-lint run ./...
+
+  -
+    name: test
+    image: golang:1.23
+    when:
+      event:
+        - push
+    commands:
+      - go test -cover ./...
+      - echo -n $(git describe --tags --abbrev=0) > .tags
+  
+  # -
+  #   name: build and release
+  #   image: plugins/docker
+  #   settings:
+  #     username:
+  #       from_secret: ghcr_username
+  #     password:
+  #       from_secret: ghcr_password
+  #     registry: ghcr.io
+  #     repo: ghcr.io/ravenxwrx/chainkills
+  #   when:
+  #     branch:
+  #       - main
+  #     ref:
+  #       - refs/tags/v*.*.*
+---
+kind: signature
+hmac: d42a7359a45fafd4020575929e242cd107c6a2a152a0ad616766274912997073
+
+...
