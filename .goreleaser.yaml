@@ -59,7 +59,7 @@ dockers:
     goos: linux
     goarch: amd64
     dockerfile: Dockerfile-goreleaser
-    use: buildx
+    use: podman
     image_templates:
       - "registry.0x42.in/terrence/statesman:{{ .Tag }}-amd64"
     build_flag_templates:
@@ -72,7 +72,7 @@ dockers:
     goos: linux
     goarch: arm64
     dockerfile: Dockerfile-goreleaser
-    use: buildx
+    use: podman
     image_templates:
       - "registry.0x42.in/terrence/statesman:{{ .Tag }}-arm64"
     build_flag_templates:
