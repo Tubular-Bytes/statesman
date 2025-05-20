@@ -61,7 +61,7 @@ dockers:
     dockerfile: Dockerfile-goreleaser
     use: buildx
     image_templates:
-      - "registry.0x42.in/terrence/docker/statesman:{{ .Tag }}-amd64"
+      - "registry.0x42.in/terrence/statesman:{{ .Tag }}-amd64"
     build_flag_templates:
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
@@ -74,7 +74,7 @@ dockers:
     dockerfile: Dockerfile-goreleaser
     use: buildx
     image_templates:
-      - "registry.0x42.in/terrence/docker/statesman:{{ .Tag }}-arm64"
+      - "registry.0x42.in/terrence/statesman:{{ .Tag }}-arm64"
     build_flag_templates:
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
@@ -82,10 +82,10 @@ dockers:
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--platform=linux/arm64"
 docker_manifests:
-  - name_template: 'registry.0x42.in/terrence/docker/statesman:{{ .Tag }}'
+  - name_template: 'registry.0x42.in/terrence/statesman:{{ .Tag }}'
     image_templates:
-    - 'registry.0x42.in/library/docker/genesis-avalon-avalond:{{ .Tag }}-amd64'
-    - 'registry.0x42.in/library/docker/genesis-avalon-avalond:{{ .Tag }}-arm64'
+    - 'registry.0x42.in/terrence/statesman:{{ .Tag }}-amd64'
+    - 'registry.0x42.in/terrence/statesman:{{ .Tag }}-arm64'
 
 # The lines beneath this are called `modelines`. See `:help modeline`
 # Feel free to remove those if you don't want/use them.
