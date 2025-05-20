@@ -9,6 +9,17 @@ import (
 	"github.com/Tubular-Bytes/statesman/pkg/model"
 )
 
+func HandleHealth(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(map[string]any{"status": "healthy"}); err != nil {
+		slog.Error("failed to encode health response", "error", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func HandleLock(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

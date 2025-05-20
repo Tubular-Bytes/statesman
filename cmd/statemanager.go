@@ -22,6 +22,7 @@ func main() {
 	r.HandleFunc("/state", router.HandlePostState).Methods(http.MethodPost)
 	r.HandleFunc("/lock", router.HandleLock)
 	r.HandleFunc("/unlock", router.HandleUnlock)
+	r.HandleFunc("/health", router.HandleHealth).Methods(http.MethodGet)
 
 	daemon := &http.Server{
 		Addr:    ":3111",
