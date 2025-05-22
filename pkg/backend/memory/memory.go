@@ -27,6 +27,7 @@ func (s *ItemStore[T]) Get(id string) (T, bool) {
 	defer s.mx.Unlock()
 
 	item, ok := s.items[id]
+
 	return item, ok
 }
 
@@ -68,6 +69,7 @@ func (s *Store) GetState(id string) (*model.State, error) {
 	if state, ok := s.states.Get(id); ok {
 		return &state, nil
 	}
+
 	return nil, model.ErrNotFound
 }
 
@@ -75,7 +77,9 @@ func (s *Store) PutState(id string, state *model.State) error {
 	if state == nil {
 		return model.ErrInvalidState
 	}
+
 	s.states.Put(id, *state)
+
 	return nil
 }
 
@@ -83,10 +87,13 @@ func (s *Store) Lock(lockData *model.LockData) error {
 	if lockData == nil {
 		return model.ErrInvalidLock
 	}
+
 	if _, ok := s.locks.Get(lockData.LockID); ok {
 		return model.ErrLockConflict
 	}
+
 	s.locks.Put(lockData.LockID, *lockData)
+
 	return nil
 }
 
@@ -94,6 +101,8 @@ func (s *Store) Unlock(lockID string) error {
 	if _, ok := s.locks.Get(lockID); !ok {
 		return model.ErrNotFound
 	}
+
 	s.locks.Delete(lockID)
+
 	return nil
 }

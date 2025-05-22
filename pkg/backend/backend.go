@@ -21,6 +21,7 @@ func Get() Store {
 	if store == nil {
 		initStore()
 	}
+
 	return store
 }
 

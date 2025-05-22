@@ -37,5 +37,5 @@ func main() {
 
 	// Wait for a signal
 	<-sigchan
-	daemon.Shutdown(context.Background()) //nolint
+	daemon.Shutdown(context.Background())
 }
