@@ -33,23 +33,28 @@ steps:
       - go test -cover ./...
       - echo -n $(git describe --tags --abbrev=0) > .tags
   
-  # -
-  #   name: build and release
-  #   image: plugins/docker
-  #   settings:
-  #     username:
-  #       from_secret: ghcr_username
-  #     password:
-  #       from_secret: ghcr_password
-  #     registry: ghcr.io
-  #     repo: ghcr.io/ravenxwrx/chainkills
-  #   when:
-  #     branch:
-  #       - main
-  #     ref:
-  #       - refs/tags/v*.*.*
+  - 
+    name: docker
+    image: thegeeklab/drone-docker-buildx
+    privileged: true
+    settings:
+      registry: registry.0x42.in
+      username: 
+        from_secret: registry_username
+      password:
+        from_secret: registry_password
+      repo: registry.0x42.in/terrence/statesman
+      tags: 
+        - latest
+        - ${DRONE_TAG}
+      platforms: 
+        - linux/arm64
+        - linux/amd64
+      when:
+        ref:
+          - refs/tags/v*.*.*
 ---
 kind: signature
-hmac: d42a7359a45fafd4020575929e242cd107c6a2a152a0ad616766274912997073
+hmac: 96c40eb96631dd2280c526b70bbeda2cb664a914d63d80d3209ef66e7c86bd17
 
 ...
