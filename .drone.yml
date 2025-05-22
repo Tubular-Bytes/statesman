@@ -51,6 +51,8 @@ steps:
         - linux/arm64
         - linux/amd64
       when:
+        event:
+          - tag
         ref:
           - refs/tags/v*.*.*
 ---
