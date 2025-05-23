@@ -41,7 +41,6 @@ steps:
       platforms: 
         - linux/arm64
         - linux/amd64
-        - darwin/arm64
       when:
         event:
           - tag
@@ -49,6 +48,6 @@ steps:
           - refs/tags/v*.*.*
 ---
 kind: signature
-hmac: 5d81e51e990bd00607fd2fe2166016488ff7618daaafcbcd75cdc95379d48be8
+hmac: 6cd1b893612521fb237bca4e443c9acd2ca7c094245b37d29b9b64465c6cefff
 
 ...
