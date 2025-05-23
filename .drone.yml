@@ -44,10 +44,8 @@ steps:
       when:
         event:
           - tag
-        ref:
-          - refs/tags/v*.*.*
 ---
 kind: signature
-hmac: 6cd1b893612521fb237bca4e443c9acd2ca7c094245b37d29b9b64465c6cefff
+hmac: 3e3907cbefcf8706faea6678df4a326631e885d901564f50315e361cd9479e75
 
 ...
