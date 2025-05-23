@@ -7,18 +7,12 @@ steps:
   -
     name: fetch
     image: alpine/git
-    when:
-      event:
-        - push
     commands:
       - git fetch --tags
 
   -
     name: lint
     image: golang:1.24
-    when:
-      event:
-        - push
     commands:
       - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.0.2
       - golangci-lint run ./...
@@ -26,9 +20,6 @@ steps:
   -
     name: test
     image: golang:1.24
-    when:
-      event:
-        - push
     commands:
       - go test -cover ./...
       - echo -n $(git describe --tags --abbrev=0) > .tags
@@ -50,6 +41,7 @@ steps:
       platforms: 
         - linux/arm64
         - linux/amd64
+        - darwin/arm64
       when:
         event:
           - tag
@@ -57,6 +49,6 @@ steps:
           - refs/tags/v*.*.*
 ---
 kind: signature
-hmac: 96c40eb96631dd2280c526b70bbeda2cb664a914d63d80d3209ef66e7c86bd17
+hmac: 5d81e51e990bd00607fd2fe2166016488ff7618daaafcbcd75cdc95379d48be8
 
 ...
