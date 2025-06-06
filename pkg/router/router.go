@@ -9,6 +9,11 @@ import (
 	"github.com/Tubular-Bytes/statesman/pkg/model"
 )
 
+const (
+	MethodLock   = "LOCK"
+	MethodUnlock = "UNLOCK"
+)
+
 func HandleHealth(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -18,6 +23,22 @@ func HandleHealth(w http.ResponseWriter, r *http.Request) {
 		slog.Error("failed to encode health response", "error", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 
+		return
+	}
+}
+
+func HandleState(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case MethodLock:
+		HandleLock(w, r)
+	case MethodUnlock:
+		HandleUnlock(w, r)
+	case http.MethodGet:
+		HandleGetState(w, r)
+	case http.MethodPost:
+		HandlePostState(w, r)
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 }
