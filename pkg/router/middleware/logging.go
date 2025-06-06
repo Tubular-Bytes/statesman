@@ -28,6 +28,7 @@ func (c *Catcher) WriteHeader(status int) {
 func (c *Catcher) Write(b []byte) (int, error) {
 	n, err := c.ResponseWriter.Write(b)
 	c.len += n
+
 	return n, err
 }
 
