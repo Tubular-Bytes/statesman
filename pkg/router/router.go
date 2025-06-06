@@ -144,16 +144,7 @@ func HandleGetState(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("ID")
 
 	if id == "" {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		encoder := json.NewEncoder(w)
-		if err := encoder.Encode(map[string]any{"version": 1}); err != nil {
-			slog.Error("failed to encode state", "error", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-
-			return
-		}
+		http.Error(w, "not found", http.StatusNotFound)
 
 		return
 	}
