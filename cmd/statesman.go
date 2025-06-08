@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"github.com/Tubular-Bytes/statesman/pkg/router"
+	"github.com/Tubular-Bytes/statesman/pkg/router/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -17,11 +18,14 @@ func main() {
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
 	r := mux.NewRouter()
+	r.Use(middleware.Logging)
 
-	r.HandleFunc("/state", router.HandleGetState).Methods(http.MethodGet)
-	r.HandleFunc("/state", router.HandlePostState).Methods(http.MethodPost)
-	r.HandleFunc("/lock", router.HandleLock)
-	r.HandleFunc("/unlock", router.HandleUnlock)
+	r.HandleFunc("/state", router.HandleState).Methods(
+		http.MethodGet,
+		http.MethodPost,
+		router.MethodLock,
+		router.MethodUnlock,
+	)
 	r.HandleFunc("/health", router.HandleHealth).Methods(http.MethodGet)
 
 	daemon := &http.Server{
@@ -30,10 +34,12 @@ func main() {
 	}
 
 	go func() {
-		if err := daemon.ListenAndServe(); err != nil {
+		if err := daemon.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			slog.Error("failed to start server", "error", err)
 		}
 	}()
+
+	slog.Info("server started", "address", daemon.Addr)
 
 	// Wait for a signal
 	<-sigchan

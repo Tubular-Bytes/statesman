@@ -57,14 +57,6 @@ func NewStore() *Store {
 	}
 }
 
-/**
-	GetState(id string) (*model.State, error)
-	PutState(id string, state *model.State) error
-
-	Lock(lockData *model.LockData) error
-	Unlock(lockID string) error
-**/
-
 func (s *Store) GetState(id string) (*model.State, error) {
 	if state, ok := s.states.Get(id); ok {
 		return &state, nil

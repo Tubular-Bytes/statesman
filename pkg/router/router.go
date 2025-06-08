@@ -9,6 +9,11 @@ import (
 	"github.com/Tubular-Bytes/statesman/pkg/model"
 )
 
+const (
+	MethodLock   = "LOCK"
+	MethodUnlock = "UNLOCK"
+)
+
 func HandleHealth(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -17,6 +22,23 @@ func HandleHealth(w http.ResponseWriter, r *http.Request) {
 	if err := encoder.Encode(map[string]any{"status": "healthy"}); err != nil {
 		slog.Error("failed to encode health response", "error", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
+}
+
+func HandleState(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case MethodLock:
+		HandleLock(w, r)
+	case MethodUnlock:
+		HandleUnlock(w, r)
+	case http.MethodGet:
+		HandleGetState(w, r)
+	case http.MethodPost:
+		HandlePostState(w, r)
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 
 		return
 	}
@@ -122,16 +144,7 @@ func HandleGetState(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("ID")
 
 	if id == "" {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		encoder := json.NewEncoder(w)
-		if err := encoder.Encode(map[string]any{"version": 1}); err != nil {
-			slog.Error("failed to encode state", "error", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-
-			return
-		}
+		http.Error(w, "not found", http.StatusNotFound)
 
 		return
 	}
